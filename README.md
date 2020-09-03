@@ -219,12 +219,26 @@ request.status_code
 
 ```
 
+
+
+
+    200
+
+
+
 We can print out the HTML content of the page using the content property:
 
 
 ```python
 request.content
 ```
+
+
+
+
+    b'<!DOCTYPE html>\n<html>\n    <head>\n        <title>A simple example page</title>\n    </head>\n    <body>\n        <p>Here is some simple content for this page.</p>\n    </body>\n</html>'
+
+
 
 ### Parsing a page with BeautifulSoup
 
@@ -234,15 +248,45 @@ We can use the BeautifulSoup library to parse this document, and extract the tex
 ```python
 from bs4 import BeautifulSoup
 soup = BeautifulSoup(request.content)
-list(soup.children)
+soup
 
 ```
+
+
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>A simple example page</title>
+    </head>
+    <body>
+    <p>Here is some simple content for this page.</p>
+    </body>
+    </html>
+
+
 
 
 ```python
 print(soup.prettify())
 
 ```
+
+    <!DOCTYPE html>
+    <html>
+     <head>
+      <title>
+       A simple example page
+      </title>
+     </head>
+     <body>
+      <p>
+       Here is some simple content for this page.
+      </p>
+     </body>
+    </html>
+
 
 As all the tags are nested, we can move through the structure one level at a time. We can first select all the elements at the top level of the page using the `children` property of `soup`.
 
@@ -251,6 +295,21 @@ As all the tags are nested, we can move through the structure one level at a tim
 list(soup.children)
 ```
 
+
+
+
+    ['html',
+     <html>
+     <head>
+     <title>A simple example page</title>
+     </head>
+     <body>
+     <p>Here is some simple content for this page.</p>
+     </body>
+     </html>]
+
+
+
 The above tells us that there are two tags at the top level of the page — the initial `<!DOCTYPE html>` tag, and the `<html>` tag. Let’s see what the type of each element in the list is:
 
 
@@ -258,6 +317,13 @@ The above tells us that there are two tags at the top level of the page — the 
 [type(item) for item in list(soup.children)]
 
 ```
+
+
+
+
+    [bs4.element.Doctype, bs4.element.Tag]
+
+
 
 The `Tag` object allows us to navigate through an HTML document, and extract other tags and text. You can learn more about the various `BeautifulSoup` objects [here](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#kinds-of-objects).
 
