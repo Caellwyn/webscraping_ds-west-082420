@@ -328,6 +328,26 @@ We’ll extract the name of the forecast item, the short description, and the te
 
 Now, we can extract the `title` attribute from the `img` tag. To do this, we just treat the `BeautifulSoup` object like a dictionary, and pass in the attribute we want as a key:
 
+
+```python
+tombstones[0].select("p.period-name")
+```
+
+
+
+
+    [<p class="period-name">Today<br/><br/></p>,
+     <p class="period-name">Tonight<br/><br/></p>,
+     <p class="period-name">Friday<br/><br/></p>,
+     <p class="period-name">Friday<br/>Night</p>,
+     <p class="period-name">Saturday<br/><br/></p>,
+     <p class="period-name">Saturday<br/>Night</p>,
+     <p class="period-name">Sunday<br/><br/></p>,
+     <p class="period-name">Sunday<br/>Night</p>,
+     <p class="period-name">Labor<br/>Day</p>]
+
+
+
 ### Extracting all the information from the page
 Now that we know how to extract each individual piece of information, we can combine our knowledge with css selectors and list comprehensions to extract everything at once.
 
@@ -336,7 +356,27 @@ In the below code, we:
 - Select all items with the class period-name inside an item with the class tombstone-container in seven_day.
 - Use a list comprehension to call the get_text method on each BeautifulSoup object.
 
+
+```python
+periods = [period.get_text() for period in tombstones[0].select("p.period-name")]
+```
+
 As you can see above, our technique gets us each of the period names, in order. Now you can apply the same technique to get the other 3 fields:
+
+
+```python
+short_descs = [desc.get_text() for desc in tombstones[0].select('p.short-desc')]
+temps =  [temp.get_text() for temp in tombstones[0].select('p.temp')]
+descs =   [desc['alt'] for desc in tombstones[0].select('img.forecast-icon')]
+print(short_descs)
+print(temps)
+print(descs)
+```
+
+    ['Sunny andBreezy', 'Clear andBreezy thenClear', 'Sunny', 'Mostly Clear', 'Sunny', 'Mostly Clearthen ChanceT-storms', 'ChanceT-storms', 'ChanceT-storms', 'Partly Sunnythen SlightChanceT-storms']
+    ['High: 87 °F', 'Low: 59 °F', 'High: 79 °F', 'Low: 62 °F', 'High: 83 °F', 'Low: 65 °F', 'High: 81 °F', 'Low: 66 °F', 'High: 79 °F']
+    ['Today: Sunny, with a high near 87. Breezy, with a southwest wind 10 to 15 mph becoming west southwest 15 to 20 mph in the afternoon. Winds could gust as high as 35 mph. ', 'Tonight: Clear, with a low around 59. Breezy, with a northwest wind 10 to 20 mph, with gusts as high as 25 mph. ', 'Friday: Sunny, with a high near 79. West northwest wind 10 to 15 mph, with gusts as high as 20 mph. ', 'Friday Night: Mostly clear, with a low around 62. West southwest wind 5 to 15 mph. ', 'Saturday: Sunny, with a high near 83. Southwest wind 5 to 10 mph, with gusts as high as 20 mph. ', 'Saturday Night: A 30 percent chance of showers and thunderstorms after 2am.  Partly cloudy, with a low around 65.', 'Sunday: A 40 percent chance of showers and thunderstorms.  Mostly cloudy, with a high near 81.', 'Sunday Night: A chance of showers and thunderstorms, mainly before 8pm.  Mostly cloudy, with a low around 66.', 'Labor Day: A slight chance of showers and thunderstorms after 2pm.  Partly sunny, with a high near 79.']
+
 
 ### Combining our data into a Pandas Dataframe
 
