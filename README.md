@@ -9,13 +9,9 @@
     3. Become familiar with the essential object and critical methods of BeautifulSoup  
     4. Be able to scrape data from a live website  
 
-# Scenario:
-    
-You are doing a project on scooter usage during Chicago's test run.  You have access to an api with data for scooter ridership across four companies for a three month period, but there is no weather data available specific to each zipcode. Luckily, you know how to webscrape, and use BeautifulSoup to gather the publically available data from the National Weather Service.
-
 # Activation
 In order to inspect the structure of a web page, your browser provides a developer tools window.
-You can access it with opt-cmd-i.
+You can access it with **opt-cmd-i**.
 Then, by clicking on the elements button, the user can inspect individual elements, and even change attributes such as text.
 
 Take a minute and visit a website, change some text, take a screen shot, and Slack it out.
@@ -28,16 +24,11 @@ We have already developed many ways of interacting with data.  We are able to:
 * gather data from API's and interact with JSON objects
 * query SQL databases
 
-While the above data structures may be the only source of data for any given project, often you will desire suplemental data.  There is publically available data all over the internet ripe for scraping whether that be artist information data from wikipedia, song lyrics from songlyrics.com, or text of famous books from Project Gutenberg.  Below, we will learn how to navigate HTML and CSS to gather data onto our local computer and turn it into our friendly dataframe objects.
+While the above data structures may be the only source of data for any given project, often you will desire *suplemental* data.  There is publically available data all over the internet ripe for scraping whether that be artist information data from wikipedia, song lyrics from songlyrics.com, or text of famous books from Project Gutenberg.  Below, we will learn how to navigate HTML and CSS to gather data onto our local computer and turn it into our friendly dataframe objects.
 
 
 
 ![scraping](https://media.giphy.com/media/l2JdZJis5RKQSqXFm/giphy.gif)
-
-## Thought Experiment
-
-Consider you are asked to answer a question as to what is the best city to launch a new summer concert. 
-Where might you go to scape relevant data?
 
 ## The components of a web page
 
@@ -204,9 +195,9 @@ We can add classes and ids to our example:
 
 Notice the syntax in the main.css file.  A period # refers to an id, and a . refers to a class.
 
-# Activity
-With the Cat Fancier's Fan page as a template, take five minutes to create a fan page of the subject of your choosing.
+# 5 minute break
 
+![break](https://media.giphy.com/media/bqgtlC34AiawQZkNSF/giphy.gif)
 
 ## Webscraping with Python
 
@@ -223,7 +214,7 @@ We can use the BeautifulSoup library to parse this document, and extract the tex
 
 As all the tags are nested, we can move through the structure one level at a time. We can first select all the elements at the top level of the page using the `children` property of `soup`.
 
-The above tells us that there are two tags at the top level of the page — the initial `<!DOCTYPE html>` tag, and the `<html>` tag. There is a newline character `(\n)` in the list as well. Let’s see what the type of each element in the list is:
+The above tells us that there are two tags at the top level of the page — the initial `<!DOCTYPE html>` tag, and the `<html>` tag. Let’s see what the type of each element in the list is:
 
 The `Tag` object allows us to navigate through an HTML document, and extract other tags and text. You can learn more about the various `BeautifulSoup` objects [here](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#kinds-of-objects).
 
@@ -337,15 +328,6 @@ We’ll extract the name of the forecast item, the short description, and the te
 
 Now, we can extract the `title` attribute from the `img` tag. To do this, we just treat the `BeautifulSoup` object like a dictionary, and pass in the attribute we want as a key:
 
-
-```python
-
-seven_day = soup.find(id='seven-day-forecast-body')
-tombstones = seven_day.find_all(class_='tombstone-container')
-# Using this afternoon, or the first time period available
-title = tombstones[0].find('img')['title']
-```
-
 ### Extracting all the information from the page
 Now that we know how to extract each individual piece of information, we can combine our knowledge with css selectors and list comprehensions to extract everything at once.
 
@@ -354,33 +336,7 @@ In the below code, we:
 - Select all items with the class period-name inside an item with the class tombstone-container in seven_day.
 - Use a list comprehension to call the get_text method on each BeautifulSoup object.
 
-
-```python
-seven_day = soup.find(id='seven-day-forecast-body')
-tombstones = seven_day.find_all(class_='tombstone-container')
-period_names = [tomb.find(class_='period-name') for tomb in tombstones]
-periods = [period.get_text() for period in period_names][1:]
-periods
-```
-
 As you can see above, our technique gets us each of the period names, in order. Now you can apply the same technique to get the other 3 fields:
-
-
-```python
-import re 
-
-short_descs = [tomb.find(class_='short-desc') for tomb in tombstones]
-short_descs = [desc.get_text() for desc in short_descs][1:]
-
-temps = [tomb.find(class_='temp') for tomb in tombstones][1:]
-temp_text = [temp.get_text() for temp in temps]
-pattern = re.compile('\d\d')
-temps = [int(pattern.search(temp).group()) for temp in temp_text]
-
-descs = [tomb.find('img') for tomb in tombstones]
-descs = [desc['title'] for desc in descs][1:]
-
-```
 
 ### Combining our data into a Pandas Dataframe
 
