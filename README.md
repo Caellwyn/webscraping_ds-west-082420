@@ -758,23 +758,6 @@ print(temps)
 print(descs)
 ```
 
-
-```python
- tombstones[0].select('img.forecast-icon')
-```
-
-
-
-
-    'Today: Sunny, with a high near 87. Breezy, with a southwest wind 10 to 15 mph becoming west southwest 15 to 20 mph in the afternoon. Winds could gust as high as 35 mph. '
-
-
-
-
-```python
-# Your code here
-```
-
 ### Combining our data into a Pandas Dataframe
 
 We can now combine the data into a Pandas DataFrame and analyze it.
