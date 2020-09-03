@@ -337,6 +337,20 @@ html = list(soup.children)[1]
 html
 ```
 
+
+
+
+    <html>
+    <head>
+    <title>A simple example page</title>
+    </head>
+    <body>
+    <p>Here is some simple content for this page.</p>
+    </body>
+    </html>
+
+
+
 Each item in the list returned by the `children` property is also a `BeautifulSoup` object, so we can also call the `children` method on `html`.
 
 Now, we can find the `children` inside the `html` tag:
@@ -346,6 +360,21 @@ Now, we can find the `children` inside the `html` tag:
 list(html.children)
 
 ```
+
+
+
+
+    ['\n',
+     <head>
+     <title>A simple example page</title>
+     </head>,
+     '\n',
+     <body>
+     <p>Here is some simple content for this page.</p>
+     </body>,
+     '\n']
+
+
 
 As you can see above, there are two tags here, `head`, and `body`. We want to extract the text inside the `p` tag, so we’ll dive into the body:
 
@@ -372,6 +401,13 @@ p.get_text()
 
 ```
 
+
+
+
+    'Here is some simple content for this page.'
+
+
+
 ### Finding all instances of a tag at once
 
 If we want to extract a single tag, we can instead use the find_all method, which will find all the instances of a tag on a page.
@@ -383,6 +419,13 @@ soup.find_all('p')
 
 ```
 
+
+
+
+    [<p>Here is some simple content for this page.</p>]
+
+
+
 Note that `find_all` returns a list, so we’ll have to loop through, or use list indexing, it to extract text:
 
 
@@ -391,6 +434,13 @@ soup.find_all('p')[0].get_text()
 
 ```
 
+
+
+
+    'Here is some simple content for this page.'
+
+
+
 If you instead only want to find the first instance of a tag, you can use the `find` method, which will return a single `BeautifulSoup` object:
 
 
@@ -398,6 +448,13 @@ If you instead only want to find the first instance of a tag, you can use the `f
 soup.find('p')
 
 ```
+
+
+
+
+    <p>Here is some simple content for this page.</p>
+
+
 
 ### Searching for tags by class and id
 
@@ -439,6 +496,37 @@ soup = BeautifulSoup(page.content)
 soup
 ```
 
+
+
+
+    <html>
+    <head>
+    <title>A simple example page</title>
+    </head>
+    <body>
+    <div>
+    <p class="inner-text first-item" id="first">
+                    First paragraph.
+                </p>
+    <p class="inner-text">
+                    Second paragraph.
+                </p>
+    </div>
+    <p class="outer-text first-item" id="second">
+    <b>
+                    First outer paragraph.
+                </b>
+    </p>
+    <p class="outer-text">
+    <b>
+                    Second outer paragraph.
+                </b>
+    </p>
+    </body>
+    </html>
+
+
+
 Now, we can use the `find_all` method to search for items by class or by id. In the below example, we’ll search for any `p` tag that has the class `outer-text`:
 
 
@@ -446,6 +534,22 @@ Now, we can use the `find_all` method to search for items by class or by id. In 
 soup.find_all('p', class_='outer-text')
 
 ```
+
+
+
+
+    [<p class="outer-text first-item" id="second">
+     <b>
+                     First outer paragraph.
+                 </b>
+     </p>,
+     <p class="outer-text">
+     <b>
+                     Second outer paragraph.
+                 </b>
+     </p>]
+
+
 
 In the below example, we’ll look for any tag that has the class `outer-text`:
 
@@ -456,6 +560,17 @@ In the below example, we’ll look for any tag that has the class `outer-text`:
 soup.find_all(class_="outer-text")[0]
 ```
 
+
+
+
+    <p class="outer-text first-item" id="second">
+    <b>
+                    First outer paragraph.
+                </b>
+    </p>
+
+
+
 We can also search for elements by `id`:
 
 
@@ -463,6 +578,15 @@ We can also search for elements by `id`:
 ```python
 soup.find_all(id="first")
 ```
+
+
+
+
+    [<p class="inner-text first-item" id="first">
+                     First paragraph.
+                 </p>]
+
+
 
 ### Using CSS Selectors
 
@@ -483,6 +607,28 @@ You can also search for items using CSS selectors. These selectors are how the C
 soup.select("p")
 
 ```
+
+
+
+
+    [<p class="inner-text first-item" id="first">
+                     First paragraph.
+                 </p>,
+     <p class="inner-text">
+                     Second paragraph.
+                 </p>,
+     <p class="outer-text first-item" id="second">
+     <b>
+                     First outer paragraph.
+                 </b>
+     </p>,
+     <p class="outer-text">
+     <b>
+                     Second outer paragraph.
+                 </b>
+     </p>]
+
+
 
 Note that the `select` method above returns a list of `BeautifulSoup` objects, just like `find` and `find_all`.
 
@@ -529,13 +675,62 @@ Now, we can extract the `title` attribute from the `img` tag. To do this, we jus
 ```python
 # your code here
 
-soup.select('#seven-day-forecast')
-```
-
-
-```python
+tombstones = soup.select('#seven-day-forecast')
 tombstones
 ```
+
+
+
+
+    [<div class="panel panel-default" id="seven-day-forecast">
+     <div class="panel-heading">
+     <b>Extended Forecast for</b>
+     <h2 class="panel-title">
+     	    	    4 Miles NE Chicago IL	</h2>
+     </div>
+     <div class="panel-body" id="seven-day-forecast-body">
+     <div id="seven-day-forecast-container"><ul class="list-unstyled" id="seven-day-forecast-list"><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Today<br/><br/></p>
+     <p><img alt="Today: Sunny, with a high near 87. Breezy, with a southwest wind 10 to 15 mph becoming west southwest 15 to 20 mph in the afternoon. Winds could gust as high as 35 mph. " class="forecast-icon" src="newimages/medium/wind_few.png" title="Today: Sunny, with a high near 87. Breezy, with a southwest wind 10 to 15 mph becoming west southwest 15 to 20 mph in the afternoon. Winds could gust as high as 35 mph. "/></p><p class="short-desc">Sunny and<br/>Breezy</p><p class="temp temp-high">High: 87 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Tonight<br/><br/></p>
+     <p><img alt="Tonight: Clear, with a low around 59. Breezy, with a northwest wind 10 to 20 mph, with gusts as high as 25 mph. " class="forecast-icon" src="DualImage.php?i=nwind_skc&amp;j=nskc" title="Tonight: Clear, with a low around 59. Breezy, with a northwest wind 10 to 20 mph, with gusts as high as 25 mph. "/></p><p class="short-desc">Clear and<br/>Breezy then<br/>Clear</p><p class="temp temp-low">Low: 59 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Friday<br/><br/></p>
+     <p><img alt="Friday: Sunny, with a high near 79. West northwest wind 10 to 15 mph, with gusts as high as 20 mph. " class="forecast-icon" src="newimages/medium/skc.png" title="Friday: Sunny, with a high near 79. West northwest wind 10 to 15 mph, with gusts as high as 20 mph. "/></p><p class="short-desc">Sunny</p><p class="temp temp-high">High: 79 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Friday<br/>Night</p>
+     <p><img alt="Friday Night: Mostly clear, with a low around 62. West southwest wind 5 to 15 mph. " class="forecast-icon" src="newimages/medium/nfew.png" title="Friday Night: Mostly clear, with a low around 62. West southwest wind 5 to 15 mph. "/></p><p class="short-desc">Mostly Clear</p><p class="temp temp-low">Low: 62 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Saturday<br/><br/></p>
+     <p><img alt="Saturday: Sunny, with a high near 83. Southwest wind 5 to 10 mph, with gusts as high as 20 mph. " class="forecast-icon" src="newimages/medium/few.png" title="Saturday: Sunny, with a high near 83. Southwest wind 5 to 10 mph, with gusts as high as 20 mph. "/></p><p class="short-desc">Sunny</p><p class="temp temp-high">High: 83 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Saturday<br/>Night</p>
+     <p><img alt="Saturday Night: A 30 percent chance of showers and thunderstorms after 2am.  Partly cloudy, with a low around 65." class="forecast-icon" src="DualImage.php?i=nfew&amp;j=hi_ntsra&amp;jp=30" title="Saturday Night: A 30 percent chance of showers and thunderstorms after 2am.  Partly cloudy, with a low around 65."/></p><p class="short-desc">Mostly Clear<br/>then Chance<br/>T-storms</p><p class="temp temp-low">Low: 65 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Sunday<br/><br/></p>
+     <p><img alt="Sunday: A 40 percent chance of showers and thunderstorms.  Mostly cloudy, with a high near 81." class="forecast-icon" src="newimages/medium/tsra40.png" title="Sunday: A 40 percent chance of showers and thunderstorms.  Mostly cloudy, with a high near 81."/></p><p class="short-desc">Chance<br/>T-storms</p><p class="temp temp-high">High: 81 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Sunday<br/>Night</p>
+     <p><img alt="Sunday Night: A chance of showers and thunderstorms, mainly before 8pm.  Mostly cloudy, with a low around 66." class="forecast-icon" src="newimages/medium/nscttsra.png" title="Sunday Night: A chance of showers and thunderstorms, mainly before 8pm.  Mostly cloudy, with a low around 66."/></p><p class="short-desc">Chance<br/>T-storms</p><p class="temp temp-low">Low: 66 °F</p></div></li><li class="forecast-tombstone">
+     <div class="tombstone-container">
+     <p class="period-name">Labor<br/>Day</p>
+     <p><img alt="Labor Day: A slight chance of showers and thunderstorms after 2pm.  Partly sunny, with a high near 79." class="forecast-icon" src="DualImage.php?i=bkn&amp;j=scttsra&amp;jp=0" title="Labor Day: A slight chance of showers and thunderstorms after 2pm.  Partly sunny, with a high near 79."/></p><p class="short-desc">Partly Sunny<br/>then Slight<br/>Chance<br/>T-storms</p><p class="temp temp-high">High: 79 °F</p></div></li></ul></div>
+     <script type="text/javascript">
+     // equalize forecast heights
+     $(function () {
+     	var maxh = 0;
+     	$(".forecast-tombstone .short-desc").each(function () {
+     		var h = $(this).height();
+     		if (h > maxh) { maxh = h; }
+     	});
+     	$(".forecast-tombstone .short-desc").height(maxh);
+     });
+     </script> </div>
+     </div>]
+
+
 
 ### Extracting all the information from the page
 Now that we know how to extract each individual piece of information, we can combine our knowledge with css selectors and list comprehensions to extract everything at once.
@@ -565,6 +760,18 @@ print(descs)
 
 
 ```python
+ tombstones[0].select('img.forecast-icon')
+```
+
+
+
+
+    'Today: Sunny, with a high near 87. Breezy, with a southwest wind 10 to 15 mph becoming west southwest 15 to 20 mph in the afternoon. Winds could gust as high as 35 mph. '
+
+
+
+
+```python
 # Your code here
 ```
 
@@ -586,12 +793,116 @@ weather = pd.DataFrame({
 weather
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>period</th>
+      <th>short_desc</th>
+      <th>temp</th>
+      <th>desc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Today</td>
+      <td>Sunny andBreezy</td>
+      <td>High: 87 °F</td>
+      <td>Today: Sunny, with a high near 87. Breezy, wit...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Tonight</td>
+      <td>Clear andBreezy thenClear</td>
+      <td>Low: 59 °F</td>
+      <td>Tonight: Clear, with a low around 59. Breezy, ...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Friday</td>
+      <td>Sunny</td>
+      <td>High: 79 °F</td>
+      <td>Friday: Sunny, with a high near 79. West north...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>FridayNight</td>
+      <td>Mostly Clear</td>
+      <td>Low: 62 °F</td>
+      <td>Friday Night: Mostly clear, with a low around ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Saturday</td>
+      <td>Sunny</td>
+      <td>High: 83 °F</td>
+      <td>Saturday: Sunny, with a high near 83. Southwes...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>SaturdayNight</td>
+      <td>Mostly Clearthen ChanceT-storms</td>
+      <td>Low: 65 °F</td>
+      <td>Saturday Night: A 30 percent chance of showers...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Sunday</td>
+      <td>ChanceT-storms</td>
+      <td>High: 81 °F</td>
+      <td>Sunday: A 40 percent chance of showers and thu...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>SundayNight</td>
+      <td>ChanceT-storms</td>
+      <td>Low: 66 °F</td>
+      <td>Sunday Night: A chance of showers and thunders...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>LaborDay</td>
+      <td>Partly Sunnythen SlightChanceT-storms</td>
+      <td>High: 79 °F</td>
+      <td>Labor Day: A slight chance of showers and thun...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 We can now do some analysis on the data. For example, we can use a regular expression and the Series.str.extract method to pull out the numeric temperature values:
 
 
 ```python
 weather.temp[0]
 ```
+
+
+
+
+    'High: 87 °F'
+
+
 
 
 ```python
