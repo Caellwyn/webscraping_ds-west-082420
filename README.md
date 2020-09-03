@@ -9,13 +9,9 @@
     3. Become familiar with the essential object and critical methods of BeautifulSoup  
     4. Be able to scrape data from a live website  
 
-# Scenario:
-    
-You are doing a project on scooter usage during Chicago's test run.  You have access to an api with data for scooter ridership across four companies for a three month period, but there is no weather data available specific to each zipcode. Luckily, you know how to webscrape, and use BeautifulSoup to gather the publically available data from the National Weather Service.
-
 # Activation
 In order to inspect the structure of a web page, your browser provides a developer tools window.
-You can access it with opt-cmd-i.
+You can access it with **opt-cmd-i**.
 Then, by clicking on the elements button, the user can inspect individual elements, and even change attributes such as text.
 
 Take a minute and visit a website, change some text, take a screen shot, and Slack it out.
@@ -28,16 +24,11 @@ We have already developed many ways of interacting with data.  We are able to:
 * gather data from API's and interact with JSON objects
 * query SQL databases
 
-While the above data structures may be the only source of data for any given project, often you will desire suplemental data.  There is publically available data all over the internet ripe for scraping whether that be artist information data from wikipedia, song lyrics from songlyrics.com, or text of famous books from Project Gutenberg.  Below, we will learn how to navigate HTML and CSS to gather data onto our local computer and turn it into our friendly dataframe objects.
+While the above data structures may be the only source of data for any given project, often you will desire *suplemental* data.  There is publically available data all over the internet ripe for scraping whether that be artist information data from wikipedia, song lyrics from songlyrics.com, or text of famous books from Project Gutenberg.  Below, we will learn how to navigate HTML and CSS to gather data onto our local computer and turn it into our friendly dataframe objects.
 
 
 
 ![scraping](https://media.giphy.com/media/l2JdZJis5RKQSqXFm/giphy.gif)
-
-## Thought Experiment
-
-Consider you are asked to answer a question as to what is the best city to launch a new summer concert. 
-Where might you go to scape relevant data?
 
 ## The components of a web page
 
@@ -204,9 +195,9 @@ We can add classes and ids to our example:
 
 Notice the syntax in the main.css file.  A period # refers to an id, and a . refers to a class.
 
-# Activity
-With the Cat Fancier's Fan page as a template, take five minutes to create a fan page of the subject of your choosing.
+# 5 minute break
 
+![break](https://media.giphy.com/media/bqgtlC34AiawQZkNSF/giphy.gif)
 
 ## Webscraping with Python
 
@@ -257,11 +248,10 @@ As all the tags are nested, we can move through the structure one level at a tim
 
 
 ```python
-type(soup.children)
-
+list(soup.children)
 ```
 
-The above tells us that there are two tags at the top level of the page — the initial `<!DOCTYPE html>` tag, and the `<html>` tag. There is a newline character `(\n)` in the list as well. Let’s see what the type of each element in the list is:
+The above tells us that there are two tags at the top level of the page — the initial `<!DOCTYPE html>` tag, and the `<html>` tag. Let’s see what the type of each element in the list is:
 
 
 ```python
@@ -296,7 +286,6 @@ As you can see above, there are two tags here, `head`, and `body`. We want to ex
 
 ```python
 body = list(html.children)[3]
-
 ```
 
 We can now isolate the `p` tag:
@@ -425,7 +414,7 @@ You can also search for items using CSS selectors. These selectors are how the C
 
 
 ```python
-soup.select("div")
+soup.select("p")
 
 ```
 
@@ -474,7 +463,7 @@ Now, we can extract the `title` attribute from the `img` tag. To do this, we jus
 ```python
 # your code here
 
-
+soup.select('#seven-day-forecast')
 ```
 
 
